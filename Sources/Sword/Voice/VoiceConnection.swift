@@ -47,9 +47,17 @@ public class VoiceConnection: Gateway, Eventable {
 
   /// Completion handler function that calls when voice connection is ready
   var handler: (VoiceConnection) -> ()
-
-  /// The Heartbeat to send through WS
-  var heartbeat: Heartbeat?
+  
+  /// Heartbeat payload to send
+  var heartbeatPayload: Payload {
+    return Payload(
+      voiceOP: .heartbeat,
+      data: Int(Date().timeIntervalSince1970 * 1000)
+    )
+  }
+  
+  /// The dispatch queue that handles sending heartbeats
+  let heartbeatQueue: DispatchQueue!
   
   /// Payload to send over gateway to initialize a voice connection
   var identify: Payload
@@ -98,6 +106,9 @@ public class VoiceConnection: Gateway, Eventable {
   /// The dispatch queue that handles sending audio
   var udpWriteQueue: DispatchQueue
 
+  /// Whether or not this heartbeat was last acked
+  var wasAcked = true
+  
   /// The encoder's writePipe to send audio to
   var writer: FileHandle? {
     return self.encoder?.writer.fileHandleForWriting
@@ -134,6 +145,10 @@ public class VoiceConnection: Gateway, Eventable {
     self.port = Int(self.endpoint[1])!
     self.handler = handler
 
+    self.heartbeatQueue = DispatchQueue(
+      label: "me.azoy.sword.voiceConnection.\(guildId).heartbeat",
+      qos: .userInitiated
+    )
     self.udpReadQueue = DispatchQueue(
       label: "me.azoy.sword.voiceConnection.udpRead.\(guildId)"
     )
@@ -308,7 +323,7 @@ public class VoiceConnection: Gateway, Eventable {
     
   /// Handles what to do on connect to gateway
   func handleConnect() {
-    self.send(self.identify.encode(), presence: false)
+    self.send(self.identify.encode())
   }
     
   /**
@@ -349,7 +364,7 @@ public class VoiceConnection: Gateway, Eventable {
         
         switch voiceOP {
         case .heartbeatACK:
-          self.heartbeat?.received = true
+          self.wasAcked = true
         default: break
         }
         
@@ -358,14 +373,7 @@ public class VoiceConnection: Gateway, Eventable {
 
       switch voiceOP {
       case .ready:
-        self.heartbeat = Heartbeat(
-          self,
-          "heartbeat.voiceconnection.\(self.guildId)",
-          interval: data["heartbeat_interval"] as! Int,
-          voice: true
-        )
-        self.heartbeat?.received = true
-        self.heartbeat?.send()
+        self.heartbeat(at: data["heartbeat_interval"] as! Int)
 
         self.ssrc = data["ssrc"] as! UInt32
 
@@ -569,7 +577,7 @@ public class VoiceConnection: Gateway, Eventable {
       ]
     ).encode()
     
-    self.send(payload, presence: false)
+    self.send(payload)
 
     if self.encoder != nil {
       self.readEncoder(for: 1)
@@ -586,7 +594,7 @@ public class VoiceConnection: Gateway, Eventable {
    - parameter text: String to send over gateway
    - parameter presence: Not needed by voice, but for Shard (will remove in rewrite)
   */
-  func send(_ text: String, presence: Bool) {
+  func send(_ text: String, presence: Bool = false) {
     #if !os(Linux)
     self.session?.write(string: text)
     #else
@@ -630,7 +638,7 @@ public class VoiceConnection: Gateway, Eventable {
       data: ["speaking": value, "delay": 0]
     ).encode()
     
-    self.send(payload, presence: false)
+    self.send(payload)
   }
 
   /**
@@ -665,7 +673,6 @@ public class VoiceConnection: Gateway, Eventable {
       self.emit(.connectionClose)
     }
     
-    self.heartbeat = nil
     self.isConnected = false
     self.encoder = nil
     
