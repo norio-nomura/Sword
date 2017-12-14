@@ -62,7 +62,7 @@ class Shard: Gateway {
   unowned let sword: Sword
 
   /// Whether or not this shard was last acked
-  var wasAcked = false
+  var wasAcked = true
   
   // MARK: Initializer
 
