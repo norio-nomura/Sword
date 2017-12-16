@@ -926,7 +926,12 @@ open class Sword: Eventable {
     then completion: @escaping (Channel?, RequestError?) -> ()
   ) {
     guard rest else {
-      completion(self.getChannel(for: channelId), nil)
+      guard let channel = self.getChannel(for: channelId) else {
+        completion(nil, RequestError("Could not get channel locally"))
+        return
+      }
+      
+      completion(channel, nil)
       return
     }
 
@@ -984,7 +989,7 @@ open class Sword: Eventable {
   ) {
     guard rest else {
       guard let guild = self.guilds[guildId] else {
-        completion(nil, nil)
+        completion(nil, RequestError("Could not get guild locally"))
         return
       }
 
@@ -1103,7 +1108,11 @@ open class Sword: Eventable {
     then completion: @escaping (Guild?, RequestError?) -> ()
   ) {
     guard rest else {
-      completion(self.guilds[guildId], nil)
+      guard let guild = self.guilds[guildId] else {
+        return completion(nil, RequestError("Could not get guild locally"))
+      }
+      
+      completion(guild, nil)
       return
     }
 
