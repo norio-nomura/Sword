@@ -17,9 +17,6 @@ public struct User {
   /// Avatar hash
   public let avatar: String?
 
-  /// Whether or not this user is a bot
-  public let isBot: Bool?
-
   /// Discriminator of user
   public let discriminator: String?
 
@@ -29,14 +26,17 @@ public struct User {
   /// ID of user
   public let id: Snowflake
 
+  /// Whether or not this user is a bot
+  public let isBot: Bool?
+  
   /// Whether of not user has mfa enabled (will probably be empty forever)
   public let isMfaEnabled: Bool?
 
-  /// Username of user
-  public let username: String?
-
   /// Whether user is verified or not
   public let isVerified: Bool?
+  
+  /// Username of user
+  public let username: String?
 
   // MARK: Initializer
 
@@ -49,14 +49,14 @@ public struct User {
   init(_ sword: Sword, _ json: [String: Any]) {
     self.sword = sword
 
-    self.id = Snowflake(json["id"])!
     self.avatar = json["avatar"] as? String
-    self.isBot = json["bot"] as? Bool
     self.discriminator = json["discriminator"] as? String
     self.email = json["email"] as? String
+    self.id = Snowflake(json["id"])!
+    self.isBot = json["bot"] as? Bool
     self.isMfaEnabled = json["mfaEnabled"] as? Bool
-    self.username = json["username"] as? String
     self.isVerified = json["verified"] as? Bool
+    self.username = json["username"] as? String
   }
 
   // MARK: Functions
