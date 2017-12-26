@@ -151,8 +151,8 @@ public struct Message {
 
    - parameter reaction: Either unicode or custom emoji to add to this message
   */
-  public func add(
-    reaction: String,
+  public func addReaction(
+    _ reaction: String,
     then completion: ((RequestError?) -> ())? = nil
   ) {
     self.channel.addReaction(reaction, to: self.id, then: completion)
@@ -169,8 +169,8 @@ public struct Message {
    - parameter reaction: Either unicode or custom emoji reaction to remove
    - parameter userId: If nil, delete from self else delete from userId
   */
-  public func delete(
-    reaction: String,
+  public func deleteReaction(
+    _ reaction: String,
     from userId: Snowflake? = nil,
     then completion: ((RequestError?) -> ())? = nil
   ) {
@@ -209,8 +209,8 @@ public struct Message {
 
    - parameter reaction: Either unicode or custom emoji reaction to get users from
   */
-  public func get(
-    reaction: String,
+  public func getReaction(
+    _ reaction: String,
     then completion: @escaping ([User]?, RequestError?) -> ()
   ) {
     self.channel.getReaction(reaction, from: self.id, then: completion)

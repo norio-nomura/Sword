@@ -9,7 +9,7 @@
 import Foundation
 
 /// Guild Type
-public class Guild: Updatable {
+public class Guild: Updatable, Imageable {
 
   // MARK: Properties
 
@@ -453,6 +453,19 @@ public class Guild: Updatable {
     self.sword?.getGuildWebhooks(from: self.id, then: completion)
   }
 
+  /**
+   Gets the link of the guild's icon
+   
+   - parameter format: File extension of the avatar (default png)
+  */
+  public func imageUrl(format: FileExtension = .png) -> URL? {
+    guard let icon = self.icon else {
+      return nil
+    }
+    
+    return URL(string: "https://cdn.discordapp.com/icons/\(self.id)/\(icon).\(format)")
+  }
+  
   /**
    Kicks member from this guild
 

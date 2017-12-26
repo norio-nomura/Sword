@@ -83,14 +83,17 @@ enum HTTPMethod: String {
 /// Used to determine avatar url format
 public enum FileExtension: String {
   
+  /// .gif format
+  case gif
+  
   /// .jpg format
   case jpg
   
   /// .png format
   case png
   
-  /// .gif format
-  case gif
+  /// .webp format
+  case webp
   
 }
 

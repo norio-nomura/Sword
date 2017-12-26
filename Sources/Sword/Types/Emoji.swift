@@ -6,8 +6,10 @@
 //  Copyright © 2017 Alejandro Alonso. All rights reserved.
 //
 
+import Foundation
+
 /// Emoji Type
-public struct Emoji {
+public struct Emoji: Imageable {
   
   // MARK: Properties
   
@@ -71,5 +73,18 @@ public struct Emoji {
     self.isManaged = nil
     self.name = name
     self.requiresColons = nil
+  }
+  
+  /**
+   Gets the link of the emoji's image
+   
+   - parameter format: File extension of the avatar (default png)
+  */
+  public func imageUrl(format: FileExtension = .png) -> URL? {
+    guard let id = self.id else {
+      return nil
+    }
+    
+    return URL(string: "https://cdn.discordapp.com/emojis/\(id).\(format)")
   }
 }
