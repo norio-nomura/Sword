@@ -22,6 +22,15 @@ public class Guild: Updatable, Imageable {
   /// AFK timeout in seconds (if there is any)
   public internal(set) var afkTimeout: Int?
 
+	/// The member type for the bot user
+	public var botMember: Member? {
+		guard let user = self.sword?.user else {
+			return nil
+		}		
+
+		return self.members[user.id]
+	}
+
   /// Collection of channels mapped by channel ID
   public internal(set) var channels = [Snowflake: GuildChannel]()
 
