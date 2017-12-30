@@ -774,7 +774,7 @@ open class Sword: Eventable {
   }
   
   /**
-   Executs a slack style webhook
+   Executes a slack style webhook
 
    #### Content Params ####
 
