@@ -30,12 +30,12 @@ open class Shield: Sword {
   */
   public init(
     token: String,
-    with swordOptions: SwordOptions = SwordOptions(),
-    and shieldOptions: ShieldOptions = ShieldOptions()
+    swordOptions: SwordOptions = SwordOptions(),
+    shieldOptions: ShieldOptions = ShieldOptions()
   ) {
     self.shieldOptions = shieldOptions
     
-    super.init(token: token, with: swordOptions)
+    super.init(token: token, options: swordOptions)
     
     if self.shieldOptions.willDefaultHelp {
       self.registerHelp()

@@ -27,10 +27,6 @@ extension Shard {
       return
     }
 
-    guard !self.sword.options.disabledEvents.contains(event) else {
-      return
-    }
-
     switch event {
 
     /// CHANNEL_CREATE

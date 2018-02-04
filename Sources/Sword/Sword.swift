@@ -99,7 +99,7 @@ open class Sword: Eventable {
    - parameter token: The bot token
    - parameter options: Options to give bot (sharding, offline members, etc)
   */
-  public init(token: String, with options: SwordOptions = SwordOptions()) {
+  public init(token: String, options: SwordOptions = SwordOptions()) {
     self.options = options
     self.token = token
   }
