@@ -91,18 +91,6 @@ open class Sword: Eventable {
   /// The user account for the bot
   public internal(set) var user: User?
 
-  #if os(macOS) || os(Linux)
-
-  /// Object of voice connections the bot is currently connected to. Mapped by guildId
-  public var voiceConnections: [Snowflake: VoiceConnection] {
-    return self.voiceManager.connections
-  }
-
-  /// Voice handler
-  lazy var voiceManager = VoiceManager()
-
-  #endif
-
   // MARK: Initializer
 
   /**
@@ -1535,37 +1523,6 @@ open class Sword: Eventable {
     }
   }
 
-  #if os(macOS) || os(Linux)
-
-  /**
-   Joins a voice channel
-
-   - parameter channelId: Channel to connect to
-  */
-  public func joinVoiceChannel(
-    _ channelId: Snowflake,
-    then completion: @escaping (VoiceConnection) -> ()
-  ) {
-
-    guard let guild = self.getGuild(for: channelId) else { return }
-
-    guard let shardId = guild.shard else { return }
-
-    guard let channel = guild.channels[channelId] else { return }
-    
-    guard channel.type == .guildVoice else { return }
-
-    let shard = self.shardManager.shards.filter {
-      $0.id == shardId
-    }[0]
-
-    self.voiceManager.handlers[guild.id] = completion
-
-    shard.joinVoiceChannel(channelId, in: guild.id)
-  }
-
-  #endif
-
   /**
    Kicks a member from a guild
 
@@ -1609,34 +1566,6 @@ open class Sword: Eventable {
       completion?(error)
     }
   }
-
-  #if os(macOS) || os(Linux)
-
-  /**
-   Leaves a voice channel
-
-   - parameter channelId: Channel to disconnect from
-  */
-  public func leaveVoiceChannel(_ channelId: Snowflake) {
-
-    guard let guild = self.getGuild(for: channelId) else { return }
-
-    guard self.voiceManager.guilds[guild.id] != nil else { return }
-
-    guard let shardId = guild.shard else { return }
-
-    guard let channel = guild.channels[channelId] else { return }
-
-    guard channel.type == .guildVoice else { return }
-
-    let shard = self.shardManager.shards.filter {
-      $0.id == shardId
-    }[0]
-
-    shard.leaveVoiceChannel(in: guild.id)
-  }
-
-  #endif
 
   /**
    Modifies a guild channel
