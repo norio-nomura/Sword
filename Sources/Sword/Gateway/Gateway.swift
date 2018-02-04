@@ -32,10 +32,6 @@ protocol Gateway: class {
   
   var wasAcked: Bool { get set }
   
-  #if os(macOS) || os(Linux)
-  func handleConnect()
-  #endif
-  
   func handleDisconnect(for code: Int)
   
   func handlePayload(_ payload: Payload)
@@ -54,11 +50,6 @@ protocol Gateway: class {
 
 extension Gateway {
   
-  /// Handles what to do on connect to gateway
-  #if os(macOS) || os(Linux)
-  func handleConnect() {}
-  #endif
-  
   /// Starts the gateway connection
   func start() {
     #if !os(Linux)
@@ -67,10 +58,6 @@ extension Gateway {
       
       self.session?.onConnect = { [unowned self] in
         self.isConnected = true
-        
-        #if os(macOS) || os(Linux)
-        self.handleConnect()
-        #endif
       }
       
       self.session?.onText = { [unowned self] text in

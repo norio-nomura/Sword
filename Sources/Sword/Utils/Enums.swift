@@ -22,21 +22,6 @@ enum OP: Int {
        heartbeatACK
 }
 
-/// Organize all voice evnets
-enum VoiceOP: Int {
-  case identify,
-       selectProtocol,
-       ready,
-       heartbeat,
-       sessionDescription,
-       speaking,
-       heartbeatACK,
-       resume,
-       hello,
-       resumed,
-       clientDisconnect = 13
-}
-
 /// Organize all websocket close codes
 enum CloseOP: Int {
   case noInternet = 50,
@@ -52,23 +37,6 @@ enum CloseOP: Int {
        sessionTimeout,
        invalidShard,
        shardingRequired
-}
-
-/// Organize all voice websocket close codes
-enum VoiceCloseOP: Int {
-  case clean = 1000,
-       unknownOP = 4001,
-       notAuthenticated = 4003,
-       authenticationFailed,
-       alreadyAuthenticated,
-       sessionNoLongerValid,
-       sessionTimeout = 4009,
-       serverNotFound = 4011,
-       unknownProtocol,
-       disconnected = 4014,
-       voiceServerCrash,
-       unknownEncryption
-  
 }
 
 /// Organize all the different http methods

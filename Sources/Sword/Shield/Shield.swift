@@ -242,7 +242,7 @@ open class Shield: Sword {
         embed.addField(
           command.name,
           value: command.options.description,
-          inline: true
+          isInline: true
         )
       }
       
