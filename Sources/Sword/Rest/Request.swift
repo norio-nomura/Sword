@@ -121,7 +121,9 @@ extension Sword {
       [unowned self, unowned sema] data, response, error in
       
       let response = response as! HTTPURLResponse
-      let headers = response.allHeaderFields
+      let headers = [String: Any](uniqueKeysWithValues: response.allHeaderFields.map {
+        (($0.key as! String).lowercased(), $0.value)
+      })
 
       if error != nil {
         #if !os(Linux)
@@ -137,7 +139,7 @@ extension Sword {
         self.handleRateLimitHeaders(
           headers["x-ratelimit-limit"],
           headers["x-ratelimit-reset"],
-          (headers["Date"] as! String).httpDate.timeIntervalSince1970,
+          (headers["date"] as! String).httpDate.timeIntervalSince1970,
           route
         )
       }
