@@ -659,6 +659,23 @@ public class Guild: Updatable {
   }
 
   /**
+   Sets bot's nickname
+
+   - parameter name: Name to set bot's nickname to
+   */
+  public func setNickname(
+    to name: String,
+    then completion: ((RequestError?) -> ())? = nil
+    ) {
+    self.sword?.request(
+      .modifyCurrentUserNick(self.id),
+      body: ["nick": name]
+    ) { [unowned self] data, error in
+      completion?(error)
+    }
+  }
+
+  /**
    Syncs an integration from this guild
 
    - parameter integrationId: Integration to sync

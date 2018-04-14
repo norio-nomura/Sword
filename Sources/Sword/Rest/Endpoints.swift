@@ -130,6 +130,8 @@ enum Endpoint {
 
   case modifyCurrentUser
 
+  case modifyCurrentUserNick(Snowflake)
+
   case modifyGuild(Snowflake)
 
   case modifyGuildChannelPositions(Snowflake)
