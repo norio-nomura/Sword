@@ -6,10 +6,14 @@ var dependencies: [Package.Dependency] = [
   .package(
     url: "https://github.com/Azoy/Sodium",
     .upToNextMajor(from: "1.0.0")
+  ),
+  .package(
+    url: "https://github.com/onevcat/MimeType.git",
+    .upToNextMajor(from: "1.0.0")
   )
 ]
 
-var targetDeps: [Target.Dependency] = []
+var targetDeps: [Target.Dependency] = ["MimeType"]
 
 #if !os(Linux)
 dependencies += [

@@ -6,13 +6,9 @@
 //  Copyright © 2017 Alejandro Alonso. All rights reserved.
 //
 
-#if !os(Linux)
 import Foundation
+import MimeType
   
-#if !os(macOS)
-import MobileCoreServices
-#endif
-
 /// Image Handler
 extension Sword {
 
@@ -44,7 +40,7 @@ extension Sword {
     let url = URL(string: fileUrl)!
     let filename = url.lastPathComponent
     let data = try Data(contentsOf: url)
-    let mimetype = mimeType(for: fileUrl)
+    let mimetype = MimeType(path: filename).value
 
     body.append("--\(boundary)\r\n")
     body.append(
@@ -65,29 +61,3 @@ extension Sword {
 func createBoundary() -> String {
   return "Boundary-\(NSUUID().uuidString)"
 }
-
-/**
- Gets mimeType for URL
-
- - parameter path: URL to get mimeType for
-*/
-func mimeType(for path: String) -> String {
-
-  let url = NSURL(string: path)!
-  let pathExtension = url.pathExtension
-
-  if let uti = UTTypeCreatePreferredIdentifierForTag(
-      kUTTagClassFilenameExtension,
-      pathExtension! as NSString, nil
-    )?.takeRetainedValue() {
-    if let mimetype = UTTypeCopyPreferredTagWithClass(
-        uti,
-        kUTTagClassMIMEType
-      )?.takeRetainedValue() {
-      return mimetype as String
-    }
-  }
-
-  return "application/octet-stream"
-}
-#endif
