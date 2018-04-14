@@ -670,7 +670,7 @@ public class Guild: Updatable {
     self.sword?.request(
       .modifyCurrentUserNick(self.id),
       body: ["nick": name]
-    ) { [unowned self] data, error in
+    ) { _, error in
       completion?(error)
     }
   }
