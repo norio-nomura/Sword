@@ -37,7 +37,7 @@ extension Sword {
       body.append("\(payloadJson)\r\n")
     }
 
-    let url = URL(string: fileUrl)!
+    let url = URL(fileURLWithPath: fileUrl)
     let filename = url.lastPathComponent
     let data = try Data(contentsOf: url)
     let mimetype = MimeType(path: filename).value
