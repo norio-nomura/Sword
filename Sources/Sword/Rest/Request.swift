@@ -93,7 +93,7 @@ extension Sword {
         request.httpBody = body.createBody()
       }
 
-      request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
 
     if let file = file {
@@ -111,7 +111,7 @@ extension Sword {
         with: payloadJson,
         fileUrl: file, boundary: boundary
       )
-      request.addValue(
+      request.setValue(
         "multipart/form-data; boundary=\(boundary)",
         forHTTPHeaderField: "Content-Type"
       )
