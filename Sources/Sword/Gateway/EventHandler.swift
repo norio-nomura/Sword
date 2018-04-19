@@ -303,7 +303,7 @@ extension Shard {
       
     /// MESSAGE_UPDATE
     case .messageUpdate:
-      self.sword.emit(.messageUpdate, with: data)
+      self.sword.emit(.messageUpdate, with: Message(self.sword, data))
 
     /// PRESENCE_UPDATE
     case .presenceUpdate:
