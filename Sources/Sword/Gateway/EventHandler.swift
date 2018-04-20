@@ -303,7 +303,12 @@ extension Shard {
       
     /// MESSAGE_UPDATE
     case .messageUpdate:
-      self.sword.emit(.messageUpdate, with: Message(self.sword, data))
+      guard let channelId = Snowflake(data["channel_id"]), let messageId = Snowflake(data["id"]) else { return }
+      self.sword.getMessage(messageId, from: channelId) { message, _ in
+        if let message = message {
+          self.sword.emit(.messageUpdate, with: message)
+        }
+      }
 
     /// PRESENCE_UPDATE
     case .presenceUpdate:
