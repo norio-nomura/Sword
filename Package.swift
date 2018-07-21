@@ -8,7 +8,7 @@ var dependencies: [Package.Dependency] = [
     .upToNextMajor(from: "1.0.0")
   ),
   .package(
-    url: "https://github.com/onevcat/MimeType.git",
+    url: "https://github.com/norio-nomura/MimeType.git",
     .upToNextMajor(from: "1.0.0")
   )
 ]
