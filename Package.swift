@@ -4,7 +4,7 @@ import PackageDescription
 
 var dependencies: [Package.Dependency] = [
   .package(
-    url: "https://github.com/Azoy/Sodium",
+    url: "https://github.com/norio-nomura/Sodium.git",
     .upToNextMajor(from: "1.0.0")
   ),
   .package(
