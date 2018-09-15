@@ -58,11 +58,15 @@ open class Sword: Eventable {
   public internal(set) var readyTimestamp: Date?
 
   /// Global URLSession (trust me i saw it on a wwdc talk, this is legit lmfao)
-  let session = URLSession(
-    configuration: .default,
-    delegate: nil,
-    delegateQueue: OperationQueue()
-  )
+  let session: URLSession = {
+    let configuration = URLSessionConfiguration.default
+    configuration.httpCookieAcceptPolicy = .never
+    return URLSession(
+      configuration: configuration,
+      delegate: nil,
+      delegateQueue: OperationQueue()
+    )
+  }()
 
   /// Amount of shards to initialize
   public internal(set) var shardCount = 1
