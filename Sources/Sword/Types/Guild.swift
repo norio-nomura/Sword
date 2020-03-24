@@ -138,8 +138,8 @@ public class Guild: Updatable {
     }
 
     if let features = json["features"] as? [String] {
-      for feature in features {
-        self.features.append(Feature(rawValue: feature)!)
+      for feature in features.compactMap(Feature.init(rawValue:)) {
+        self.features.append(feature)
       }
     }
 
