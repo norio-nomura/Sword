@@ -121,9 +121,10 @@ extension Sword {
       [unowned self, unowned sema] data, response, error in
       
       let response = response as! HTTPURLResponse
-      let headers = [String: Any](uniqueKeysWithValues: response.allHeaderFields.map {
-        (($0.key as! String).lowercased(), $0.value)
-      })
+      var headers = [String: Any]()
+      response.allHeaderFields.forEach {
+        headers[($0.key as! String).lowercased()] = $0.value
+      }
 
       if error != nil {
         #if !os(Linux)
